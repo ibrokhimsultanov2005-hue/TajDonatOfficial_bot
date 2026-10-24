@@ -69,22 +69,32 @@
         <div class="game-card" onclick="openGame('freefire')">
             <div class="game-icon" style="background: linear-gradient(135deg, #ff416c, #ff4b2b);">🔥</div>
             <div class="game-title">Free Fire</div>
-            <div class="game-sub">Алмазы / Ваучеры</div>
+            <div class="game-sub">Алмазы</div>
         </div>
         <div class="game-card" onclick="openGame('pubg')">
             <div class="game-icon" style="background: linear-gradient(135deg, #f7971e, #ffd200);">🔫</div>
             <div class="game-title">PUBG Mobile</div>
-            <div class="game-sub">UC / Royale Pass</div>
+            <div class="game-sub">UC / RP</div>
         </div>
         <div class="game-card" onclick="openGame('standoff')">
             <div class="game-icon" style="background: linear-gradient(135deg, #8e2de2, #4a00e0);">🎯</div>
             <div class="game-title">Standoff 2</div>
-            <div class="game-sub">Gold / Промокоды</div>
+            <div class="game-sub">Gold</div>
         </div>
         <div class="game-card" onclick="openGame('brawl')">
             <div class="game-icon" style="background: linear-gradient(135deg, #00c6ff, #0072ff);">⭐</div>
             <div class="game-title">Brawl Stars</div>
-            <div class="game-sub">Гемы / Pass</div>
+            <div class="game-sub">Гемы</div>
+        </div>
+        <div class="game-card" onclick="openGame('coc')">
+            <div class="game-icon" style="background: linear-gradient(135deg, #f12711, #f5af19);">🛡️</div>
+            <div class="game-title">Clash of Clans</div>
+            <div class="game-sub">Кристаллы</div>
+        </div>
+        <div class="game-card" onclick="openGame('mlbb')">
+            <div class="game-icon" style="background: linear-gradient(135deg, #ff9966, #ff5e62);">⚔️</div>
+            <div class="game-title">Mobile Legends</div>
+            <div class="game-sub">Diamonds</div>
         </div>
     </div>
 
@@ -95,7 +105,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Игровой ID (Player ID)</label>
-            <input type="number" id="playerId" class="form-input" placeholder="Введите ваш ID в игре">
+            <input type="text" id="playerId" class="form-input" placeholder="Введите ваш ID / тег">
         </div>
         <label class="form-label">Выберите пакет доната:</label>
         <div class="packages-grid" id="packagesList"></div>
@@ -116,12 +126,16 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         let balance = 200.00, selectedPackage = null, selectedGameKey = '', discount = 0;
+        
         const gameData = {
             freefire: { name: 'Free Fire', packages: [{ amount: '100 💎', price: 12 }, { amount: '210 💎', price: 24 }, { amount: '530 💎', price: 60 }] },
             pubg: { name: 'PUBG Mobile', packages: [{ amount: '60 UC', price: 11 }, { amount: '325 UC', price: 52 }, { amount: '660 UC', price: 105 }] },
-            standoff: { name: 'Standoff 2', packages: [{ amount: '100 Gold', price: 15 }, { amount: '500 Gold', price: 75 }] },
-            brawl: { name: 'Brawl Stars', packages: [{ amount: '30 Gems', price: 18 }, { amount: '80 Gems', price: 48 }] }
+            standoff: { name: 'Standoff 2', packages: [{ amount: '100 Gold', price: 15 }, { amount: '500 Gold', price: 75 }, { amount: '1000 Gold', price: 145 }] },
+            brawl: { name: 'Brawl Stars', packages: [{ amount: '30 Gems', price: 18 }, { amount: '80 Gems', price: 48 }, { amount: '170 Gems', price: 95 }] },
+            coc: { name: 'Clash of Clans', packages: [{ amount: '80 Gems', price: 20 }, { amount: '500 Gems', price: 110 }, { amount: '1200 Gems', price: 240 }] },
+            mlbb: { name: 'Mobile Legends', packages: [{ amount: '86 💎', price: 16 }, { amount: '172 💎', price: 32 }, { amount: '257 💎', price: 48 }] }
         };
+
         function openGame(key) {
             selectedGameKey = key; selectedPackage = null; discount = 0;
             const data = gameData[key];
@@ -158,4 +172,5 @@
     </script>
 </body>
 </html>
+
 
