@@ -18,50 +18,58 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text); padding: 16px; padding-bottom: 40px; }
-        .bank-card { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 20px; padding: 20px; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35); margin-bottom: 24px; position: relative; overflow: hidden; }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .card-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; opacity: 0.9; }
-        .card-chip { width: 34px; height: 24px; background: #f59e0b; border-radius: 5px; }
-        .card-balance { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
-        .card-number { font-family: monospace; font-size: 15px; letter-spacing: 2px; opacity: 0.9; display: flex; justify-content: space-between; align-items: center; }
-        .card-actions { margin-top: 15px; display: flex; gap: 10px; }
-        .btn-topup { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        
+        .header-banner {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        .header-banner h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .header-banner p { font-size: 13px; opacity: 0.85; }
+
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        
         .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
         .game-card { background: var(--card-bg); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); cursor: pointer; }
+        .game-card:active { transform: scale(0.97); }
         .game-icon { width: 55px; height: 55px; border-radius: 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; }
         .game-title { font-weight: 700; font-size: 14px; margin-bottom: 3px; text-align: center; }
         .game-sub { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+        /* Модальное окно */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(10px); z-index: 100; padding: 20px; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn-close { background: var(--card-bg); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; }
+        
         .packages-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
         .pkg-item { background: var(--card-bg); border: 2px solid transparent; border-radius: 14px; padding: 12px; text-align: center; cursor: pointer; }
         .pkg-item.selected { border-color: var(--accent); background: rgba(99, 102, 241, 0.15); }
         .pkg-amount { font-size: 15px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
         .pkg-price { font-size: 13px; font-weight: 600; }
+
         .form-group { margin-bottom: 16px; }
         .form-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
         .form-input { width: 100%; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 14px; color: white; font-size: 14px; outline: none; }
+        
         .promo-box { display: flex; gap: 8px; }
         .btn-promo { background: var(--card-bg); border: 1px solid var(--accent); color: var(--accent); padding: 0 16px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        
+        .payment-box { background: var(--card-bg); border-radius: 14px; padding: 15px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .payment-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+        .payment-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+        .payment-number { font-family: monospace; font-size: 15px; color: white; font-weight: bold; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 6px; display: inline-block; margin-top: 4px; }
+
         .btn-primary { width: 100%; background: var(--accent); color: white; border: none; border-radius: 14px; padding: 14px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="bank-card">
-        <div class="card-top">
-            <span class="card-title"><i class="fa-solid fa-bolt"></i> TajDonat Card</span>
-            <div class="card-chip"></div>
-        </div>
-        <div class="card-balance" id="userBalance">200.00 TJS</div>
-        <div class="card-number">
-            <span id="cardNumber">8888 •••• •••• 1001</span>
-            <i class="fa-solid fa-copy" onclick="copyCard()" style="cursor:pointer; font-size:14px;"></i>
-        </div>
-        <div class="card-actions">
-            <button class="btn-topup" onclick="showTopup()"><i class="fa-solid fa-plus"></i> Пополнить баланс</button>
-        </div>
+
+    <div class="header-banner">
+        <h1>⚡ TajDonat Official</h1>
+        <p>Быстрый донат в любимые игры по самым выгодным ценам</p>
     </div>
 
     <div class="section-title"><i class="fa-solid fa-gamepad" style="color:var(--accent)"></i> Выберите игру</div>
@@ -98,34 +106,51 @@
         </div>
     </div>
 
+    <!-- Модальное окно заказа и оплаты -->
     <div class="modal" id="gameModal">
         <div class="modal-header">
             <h2 id="modalGameTitle">Free Fire</h2>
             <button class="btn-close" onclick="closeModal('gameModal')">✕</button>
         </div>
+
         <div class="form-group">
-            <label class="form-label">Игровой ID (Player ID)</label>
-            <input type="text" id="playerId" class="form-input" placeholder="Введите ваш ID / тег">
+            <label class="form-label">Ваш игровой ID (Player ID / Тег)</label>
+            <input type="text" id="playerId" class="form-input" placeholder="Введите ваш ID">
         </div>
+
         <label class="form-label">Выберите пакет доната:</label>
         <div class="packages-grid" id="packagesList"></div>
+
         <div class="form-group">
-            <label class="form-label">Промокод</label>
+            <label class="form-label">Промокод (если есть)</label>
             <div class="promo-box">
-                <input type="text" id="promoCode" class="form-input" placeholder="Промокод">
+                <input type="text" id="promoCode" class="form-input" placeholder="Введите промокод">
                 <button class="btn-promo" onclick="applyPromo()">OK</button>
             </div>
         </div>
-        <div style="background: var(--card-bg); padding: 12px; border-radius:12px; margin-bottom:15px; font-size:14px;">
-            Итого: <strong id="totalPrice" style="color:var(--green)">0 TJS</strong>
+
+        <!-- Реквизиты для оплаты -->
+        <div class="payment-box">
+            <div class="payment-title"><i class="fa-solid fa-credit-card"></i> Реквизиты для оплаты (TJS):</div>
+            <div class="payment-text">
+                Переведите нужную сумму на карту или кошелек:<br>
+                • <strong>Карта (Alif / DC):</strong> <span class="payment-number">988 00 00 00</span><br>
+                • <strong>Кошелек (МТС / Тел):</strong> <span class="payment-number">+992 988 00 00 00</span><br>
+                После оплаты нажмите кнопку ниже, заказ прилетит администратору с вашим ID!
+            </div>
         </div>
-        <button class="btn-primary" onclick="processOrder()">Оплатить заказ</button>
+
+        <div style="background: var(--card-bg); padding: 12px; border-radius:12px; margin-bottom:15px; font-size:14px; border: 1px solid rgba(255,255,255,0.05);">
+            К оплате: <strong id="totalPrice" style="color:var(--green)">0 TJS</strong>
+        </div>
+
+        <button class="btn-primary" onclick="processOrder()">Оплатил, отправить заказ</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        let balance = 200.00, selectedPackage = null, selectedGameKey = '', discount = 0;
+        let selectedPackage = null, selectedGameKey = '', discount = 0;
         
         const gameData = {
             freefire: { name: 'Free Fire', packages: [{ amount: '100 💎', price: 12 }, { amount: '210 💎', price: 24 }, { amount: '530 💎', price: 60 }] },
@@ -162,15 +187,19 @@
         }
         function processOrder() {
             const id = document.getElementById('playerId').value;
-            if (!id) { tg.showAlert('Введите ID!'); return; }
-            if (!selectedPackage) { tg.showAlert('Выберите пакет!'); return; }
-            tg.sendData(JSON.stringify({ game: gameData[selectedGameKey].name, playerId: id, package: selectedPackage.amount }));
+            if (!id) { tg.showAlert('Введите ваш игровой ID!'); return; }
+            if (!selectedPackage) { tg.showAlert('Выберите пакет доната!'); return; }
+
+            const orderData = {
+                game: gameData[selectedGameKey].name,
+                playerId: id,
+                package: selectedPackage.amount,
+                price: (selectedPackage.price - discount)
+            };
+
+            tg.sendData(JSON.stringify(orderData));
             tg.close();
         }
-        function copyCard() { navigator.clipboard.writeText('8888-1001'); tg.showAlert('Скопировано!'); }
-        function showTopup() { tg.showAlert('Свяжитесь с администратором для пополнения!'); }
     </script>
 </body>
 </html>
-
-
