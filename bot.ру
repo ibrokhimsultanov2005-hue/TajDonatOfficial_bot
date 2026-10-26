@@ -1,0 +1,44 @@
+import os
+import logging
+import json
+from aiogram import Bot, Dispatcher, types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from aiogram.utils import executor
+
+# Берем токен из настроек Render (безопасно!)
+API_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_ID = 123456789 # <--- Твой Telegram ID
+WEB_APP_URL = 'https://ibrokhimsultanov2005-hue.github.io/tajdonat/' # <--- Твоя ссылка на GitHub Pages
+
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+
+@dp.message_handler(commands=['start'])
+async def send_welcome(message: types.Message):
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton(text="💎 Магазин TajDonat", web_app=WebAppInfo(url=WEB_APP_URL)))
+    await message.reply("⚡ Привет! Это официальный бот **TajDonat**.\n\nНажми на кнопку ниже, чтобы открыть магазин:", parse_mode='Markdown', reply_markup=markup)
+
+@dp.message_handler(content_types=types.ContentType.WEB_APP_DATA)
+async def web_app_data_handler(message: types.Message):
+    try:
+        order = json.loads(message.web_app_data.data)
+    except:
+        await message.answer("❌ Ошибка обработки данных.")
+        return
+
+    order_text = (
+        "🔔 **НОВЫЙ ЗАКАЗ!**\n\n"
+        f"🌐 **Игра:** {order.get('game')}\n"
+        f"🆔 **ID:** `{order.get('playerId')}`\n"
+        f"✅ **Ник:** `{order.get('nickname')}`\n"
+        f"💎 **Пакет:** {order.get('package')}\n"
+        f"💰 **Сумма:** {order.get('price')} TJS\n\n"
+        f"👤 **Покупатель:** @{message.from_user.username}"
+    )
+    await bot.send_message(chat_id=ADMIN_ID, text=order_text, parse_mode='Markdown')
+    await message.answer("✅ Заказ принят! Администратор проверяет оплату.")
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
