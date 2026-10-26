@@ -5,10 +5,14 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from aiogram.utils import executor
 
-# Берем токен из настроек Render (безопасно!)
-API_TOKEN = os.getenv('BOT_TOKEN')
-ADMIN_ID = 123456789 # <--- Твой Telegram ID
-WEB_APP_URL = 'https://ibrokhimsultanov2005-hue.github.io/tajdonat/' # <--- Твоя ссылка на GitHub Pages
+# Сюда вставь свой новый токен от BotFather
+API_TOKEN = 8617960858:AAFSEvPkFuAvCs8uxXMyXoF0Ou7uOe63-2o
+
+# Вставь свой Telegram ID, чтобы получать уведомления о заказах
+ADMIN_ID = 123456789  
+
+# Ссылка на твой Web App (GitHub Pages)
+WEB_APP_URL = 'https://ibrokhimsultanov2005-hue.github.io/tajdonat/'
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
@@ -17,28 +21,40 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton(text="💎 Магазин TajDonat", web_app=WebAppInfo(url=WEB_APP_URL)))
-    await message.reply("⚡ Привет! Это официальный бот **TajDonat**.\n\nНажми на кнопку ниже, чтобы открыть магазин:", parse_mode='Markdown', reply_markup=markup)
+    markup.add(InlineKeyboardButton(text="💎 Открыть TajDonat", web_app=WebAppInfo(url=WEB_APP_URL)))
+    await message.reply(
+        "⚡ Привет! Добро пожаловать в официальный бот **TajDonat**.\n\n"
+        "Нажми на кнопку ниже, чтобы открыть магазин и выбрать игровую валюту:",
+        parse_mode='Markdown',
+        reply_markup=markup
+    )
 
 @dp.message_handler(content_types=types.ContentType.WEB_APP_DATA)
 async def web_app_data_handler(message: types.Message):
     try:
         order = json.loads(message.web_app_data.data)
     except:
-        await message.answer("❌ Ошибка обработки данных.")
+        await message.answer("❌ Ошибка при обработке данных заказа.")
         return
-
+    
     order_text = (
-        "🔔 **НОВЫЙ ЗАКАЗ!**\n\n"
+        "🔔 **НОВЫЙ ЗАКАЗ В TAJDONAT!**\n\n"
         f"🌐 **Игра:** {order.get('game')}\n"
-        f"🆔 **ID:** `{order.get('playerId')}`\n"
-        f"✅ **Ник:** `{order.get('nickname')}`\n"
+        f"🆔 **ID игрока:** `{order.get('playerId')}`\n"
+        f"✅ **Никнейм:** `{order.get('nickname')}`\n"
         f"💎 **Пакет:** {order.get('package')}\n"
-        f"💰 **Сумма:** {order.get('price')} TJS\n\n"
-        f"👤 **Покупатель:** @{message.from_user.username}"
+        f"💰 **Сумма к оплате:** {order.get('price')} TJS\n\n"
+        f"👤 **Покупатель:** @{message.from_user.username or 'скрыт'}"
     )
-    await bot.send_message(chat_id=ADMIN_ID, text=order_text, parse_mode='Markdown')
-    await message.answer("✅ Заказ принят! Администратор проверяет оплату.")
+    
+    # Отправляем заказ тебе (админу)
+    try:
+        await bot.send_message(chat_id=ADMIN_ID, text=order_text, parse_mode='Markdown')
+    except Exception as e:
+        logging.error(f"Не удалось отправить уведомление админу: {e}")
+
+    # Отвечаем клиенту в чат
+    await message.answer("✅ **Заказ успешно отправлен!**\nАдминистратор проверяет оплату и скоро зачислит валюту.")
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
