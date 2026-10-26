@@ -5,11 +5,17 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from aiogram.utils import executor
 
-# Сюда вставь свой новый токен от BotFather
-API_TOKEN = 8617960858:AAFSEvPkFuAvCs8uxXMyXoF0Ou7uOe63-2o
+# ==========================================
+# 1. СЮДА ВСТАВЬ СВОЙ ТОКЕН ИЗ BOTFATHER
+# (внутри кавычек вместо текста)
+# ==========================================
+API_TOKEN = '8617960858:AAFSEvPkFuAvCs8uxXMyXoF0Ou7uOe63-2o'
 
-# Вставь свой Telegram ID, чтобы получать уведомления о заказах
-ADMIN_ID = 7543053590
+# ==========================================
+# 2. СЮДА ВСТАВЬ СВОЙ TELEGRAM ID
+# (только цифры, без кавычек)
+# ==========================================
+ADMIN_ID = 7543053590  
 
 # Ссылка на твой Web App (GitHub Pages)
 WEB_APP_URL = 'https://ibrokhimsultanov2005-hue.github.io/tajdonat/'
@@ -47,13 +53,11 @@ async def web_app_data_handler(message: types.Message):
         f"👤 **Покупатель:** @{message.from_user.username or 'скрыт'}"
     )
     
-    # Отправляем заказ тебе (админу)
     try:
         await bot.send_message(chat_id=ADMIN_ID, text=order_text, parse_mode='Markdown')
     except Exception as e:
         logging.error(f"Не удалось отправить уведомление админу: {e}")
 
-    # Отвечаем клиенту в чат
     await message.answer("✅ **Заказ успешно отправлен!**\nАдминистратор проверяет оплату и скоро зачислит валюту.")
 
 if __name__ == '__main__':
